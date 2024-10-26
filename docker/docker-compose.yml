@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    platform: linux/arm64/v8
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: afriblog
+      POSTGRES_PASSWORD: afriblog
+      POSTGRES_DB: afriblog
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/reset.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U afriblog"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:alpine
+    platform: linux/arm64/v8
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mailhog:
+    image: jcalonso/mailhog:latest
+    platform: linux/arm64/v8
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  postgres_data:
+  redis_data:

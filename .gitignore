@@ -1,0 +1,24 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build outputs
+dist
+build
+.next
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# System files
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.idea
+.vscode
